@@ -49,24 +49,24 @@ MAX_HISTORY = 6
 class ChatGLM():
     def __init__(self,quantize_level,gpu_id):
         logger.info('Start initialize model...')
-        self.tokenizer = AutoTokenizer.from_pretrained('THUDM/chatglm-6b',trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained('./chatglm-6b',trust_remote_code=True)
         self.model = self._model(quantize_level,gpu_id)
         self.model.eval()
         _,_ = self.model.chat(self.tokenizer,'你好',history=[])
         logger.info('Mondel initialization finished.')
 
     def _model(self,quantize_level,gpu_id):
-        model_name = 'THUDM/chatglm-6b'
+        model_name = './chatglm-6b'
         quantize = int(args.quantize)
-        tokenizer = AutoTokenizer.from_pretrained('THUDM/chatglm-6b',trust_remote_code =True)
+        tokenizer = AutoTokenizer.from_pretrained('./chatglm-6b',trust_remote_code =True)
         model = None
         if gpu_id =='-1':
             if quantize == 8:
 
                 print('CPU模式只能是16或者4，默认为4')
-                model_name = 'THUDM/chatglm-6b-int4'
+                model_name = './chatglm-6b-int4'
             elif quantize == 4:
-                model_name = 'THUDM/chatglm-6b-int4'
+                model_name = './chatglm-6b-int4'
             model = AutoModel.from_pretrained(model_name,trust_remote_code=True).float()
         else:
             gpu_ids = gpu_id.split(',')
